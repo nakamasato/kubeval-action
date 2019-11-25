@@ -1,6 +1,6 @@
-# Kubeval
+# Kubeval for kustomize
 
-A [GitHub Action](https://github.com/features/actions) for using [Kubeval](https://github.com/instrumenta/kubeval) in your workflows.
+A [GitHub Action](https://github.com/features/actions) to run [Kubeval](https://github.com/instrumenta/kubeval) for [Kustomize](https://github.com/kubernetes-sigs/kustomize) build directories
 
 You can use the action as follows:
 
@@ -12,8 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: test
-      uses: instrumenta/kubeval-action@master
+    - name: validate kubernetes yaml for kustomize
+      uses: nakamasato/kubeval-action@kubeval-kustomize
+      with:
+        dirs: apps/sample-app/overlays/prod,apps/sample-app/overlays/dev
 ```
 
 By default the action will recursively scan for YAML files and validate them as Kubernetes obejcts. You can configure this with the parameters.
@@ -23,10 +25,4 @@ passed to the action using `with`.
 
 | Property | Default | Description |
 | --- | --- | --- |
-| files | . | Which files or directories to validate |
-| output | stdout | How to format the output from Conftest (stdout, json or tap) |
-| openshift | false | Whether or not to use the OpenShift schemas rather than the upstread Kubernetes ones |
-| strict | true | Whether ot not to fail for additional properties in objects |
-| ignore_missing_schemas | true | Whether to fail if unknown resources are found |
-| version | master | Which version of Kubernetes to validate against |
-
+| dirs | . | directories to run `kustomize build` |
